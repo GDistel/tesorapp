@@ -1,5 +1,6 @@
+import { Expense } from 'src/expense/expense.entity';
 import { User } from 'src/auth/user.entity';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Currencies, ExpensesListStatus } from './expenses-list.enums';
 
 @Entity()
@@ -19,8 +20,11 @@ export class ExpensesList extends BaseEntity {
     @Column()
     currency: Currencies;
 
-    @ManyToOne(type => User, user => user.expensesList, { eager: false })
+    @ManyToOne(type => User, user => user.expensesLists, { eager: false })
     user: User;
+
+    @OneToMany(type => Expense, expense => expense.expensesList, { eager: true })
+    expenses: User;
 
     @Column()
     userId: number;

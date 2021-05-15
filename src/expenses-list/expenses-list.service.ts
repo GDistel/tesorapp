@@ -24,6 +24,7 @@ export class ExpensesListService {
         if (!found) {
             throw new NotFoundException(`ExpensesList with ID "${id}" not found`);
         }
+        delete found.expenses;
         return found;
     }
 
