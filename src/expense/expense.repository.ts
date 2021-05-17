@@ -10,10 +10,17 @@ import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
 @EntityRepository(Expense)
 export class ExpenseRepository extends Repository<Expense> {
 
-    async getExpenses(filterDto: GetExpenseFilterDto, user: User): Promise<Expense[]> {
+    async getExpenses(
+        filterDto: GetExpenseFilterDto,
+        user: User,
+        expensesListId?: number
+    ): Promise<Expense[]> {
         const { type, search } = filterDto;
         const query = this.createQueryBuilder('expense');
         query.where('expense.userId = :userId', { userId: user.id });
+        if (expensesListId) {
+            query.andWhere('expense.expensesListId = :expensesListId', { expensesListId });
+        }
         if (type) {
             query.andWhere('expense.type = :type', { type });
         }
@@ -23,6 +30,7 @@ export class ExpenseRepository extends Repository<Expense> {
                 { search: `%${search}%` },
             );
         }
+
         try {
             const expenses = await query.getMany();
             return expenses;    

@@ -12,15 +12,15 @@ import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
 export class ExpensesListService {
     constructor(
         @InjectRepository(ExpensesListRepository)
-        private taskRepository: ExpensesListRepository,
+        private expensesListRepository: ExpensesListRepository,
     ) {}
 
     async getExpensesLists(filterDto: GetExpensesListFilterDto, user: User): Promise<ExpensesList[]> {
-        return this.taskRepository.getExpensesLists(filterDto, user);
+        return this.expensesListRepository.getExpensesLists(filterDto, user);
     }
 
     async getExpensesListById(id: number, user: User): Promise<ExpensesList> {
-        const found = await this.taskRepository.findOne({ where: { id, userId: user.id } });
+        const found = await this.expensesListRepository.findOne({ where: { id, userId: user.id } });
         if (!found) {
             throw new NotFoundException(`ExpensesList with ID "${id}" not found`);
         }
@@ -29,11 +29,11 @@ export class ExpensesListService {
     }
 
     async createExpensesList(createExpensesListDto: CreateExpensesListDto, user: User): Promise<ExpensesList> {
-        return this.taskRepository.createExpensesList(createExpensesListDto, user);
+        return this.expensesListRepository.createExpensesList(createExpensesListDto, user);
     }
 
     async deleteExpensesList(id: number, user: User): Promise<void> {
-        const result = await this.taskRepository.delete({ id, userId: user.id });
+        const result = await this.expensesListRepository.delete({ id, userId: user.id });
         if (result.affected === 0) {
             throw new NotFoundException(`ExpensesList with ID "${id}" not found`);
         }

@@ -16,8 +16,8 @@ export class ExpenseService {
         private expensesListService: ExpensesListService
     ) {}
 
-    async getExpenses(filterDto: GetExpenseFilterDto, user: User): Promise<Expense[]> {
-        return this.expenseRepository.getExpenses(filterDto, user);
+    async getExpenses(filterDto: GetExpenseFilterDto, user: User, expensesListId?: number): Promise<Expense[]> {
+        return this.expenseRepository.getExpenses(filterDto, user, expensesListId);
     }
 
     async getExpenseById(id: number, user: User): Promise<Expense> {
