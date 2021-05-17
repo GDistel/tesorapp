@@ -17,10 +17,9 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { GetExpensesListFilterDto } from './dto/get-expenses-list-filter.dto';
-import { ExpensesListValidationPipe } from './pipes/expenses-list-status-validation.pipe';
-import { ExpensesListStatus } from './expenses-list.enums';
 import { ExpensesList } from './expenses-list.entity';
 import { ExpensesListService } from './expenses-list.service';
+import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
 
 
 @Controller('expenses-list')
@@ -56,12 +55,12 @@ export class ExpensesListController {
         return this.expensesListService.deleteExpensesList(id, user);
     }
 
-    @Patch('/:id/status')
+    @Patch('/:id')
     updateExpensesListStatus(
         @Param('id', ParseIntPipe) id: number,
-        @Body('status', ExpensesListValidationPipe) status: ExpensesListStatus,
+        @Body() updateExpensesListDto: UpdateExpensesListDto,
         @GetUser() user: User
     ): Promise<ExpensesList> {
-        return this.expensesListService.updateExpensesListStatus(id, status, user);
+        return this.expensesListService.updateExpensesListStatus(id, updateExpensesListDto, user);
     }
 }

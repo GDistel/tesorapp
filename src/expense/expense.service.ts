@@ -5,16 +5,15 @@ import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { Expense } from './expense.entity';
 import { ExpenseRepository } from './expense.repository';
-import { ExpenseType } from './expense.enums';
-import { ExpensesListRepository } from 'src/expenses-list/expenses-list.repository';
+import { ExpensesListService } from 'src/expenses-list/expenses-list.service';
+import { UpdateExpenseDto } from './dto/update-expense.dto';
 
 @Injectable()
 export class ExpenseService {
     constructor(
         @InjectRepository(ExpenseRepository)
         private expenseRepository: ExpenseRepository,
-        @InjectRepository(ExpensesListRepository)
-        private expensesListRepository: ExpensesListRepository,
+        private expensesListService: ExpensesListService
     ) {}
 
     async getExpenses(filterDto: GetExpenseFilterDto, user: User): Promise<Expense[]> {
@@ -30,22 +29,31 @@ export class ExpenseService {
     }
 
     async createExpense(createExpenseDto: CreateExpenseDto, user: User): Promise<Expense> {
-        const expensesList = await this.expensesListRepository.findOne({
-            where: { id: createExpenseDto.expensesListId, userId: user.id }
-        });
+        const expensesList = await this.expensesListService.getExpensesListById(createExpenseDto.expensesListId, user);
         return this.expenseRepository.createExpense(createExpenseDto, expensesList, user);
     }
 
-    // async deleteExpense(id: number, user: User): Promise<void> {
-    //     const result = await this.expenseRepository.delete({ id, userId: user.id });
-    //     if (result.affected === 0) {
-    //         throw new NotFoundException(`Expense with ID "${id}" not found`);
-    //     }
-    // }
+    async deleteExpense(id: number, user: User): Promise<void> {
+        const result = await this.expenseRepository.delete({ id, userId: user.id });
+        if (result.affected === 0) {
+            throw new NotFoundException(`Expense with ID "${id}" not found`);
+        }
+    }
 
-    async updateExpenseStatus(id: number, type: ExpenseType, user: User): Promise<Expense> {
+    async updateExpenseStatus(id: number, updateExpenseDto: UpdateExpenseDto, user: User): Promise<Expense> {
         const expense = await this.getExpenseById(id, user);
-        expense.type = type;
+        if (updateExpenseDto.name) {
+            expense.name = updateExpenseDto.name;
+        }
+        if (updateExpenseDto.amount) {
+            expense.amount = updateExpenseDto.amount;
+        }
+        if (updateExpenseDto.date) {
+            expense.date = updateExpenseDto.date;
+        }
+        if (updateExpenseDto.paidBy) {
+            expense.paidBy = updateExpenseDto.paidBy;
+        }
         await expense.save();
         return expense;
     }

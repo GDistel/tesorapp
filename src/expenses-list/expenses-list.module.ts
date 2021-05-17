@@ -9,5 +9,6 @@ import { ExpensesListService } from './expenses-list.service';
     imports: [TypeOrmModule.forFeature([ExpensesListRepository]), AuthModule],
     controllers: [ExpensesListController],
     providers: [ExpensesListService],
+    exports: [TypeOrmModule.forFeature([ExpensesListRepository])]
 })
 export class ExpensesListModule {}

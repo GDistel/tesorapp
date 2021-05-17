@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { ExpensesListRepository } from './expenses-list.repository';
 import { GetExpensesListFilterDto } from './dto/get-expenses-list-filter.dto';
-import { ExpensesListStatus } from './expenses-list.enums';
 import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { User } from 'src/auth/user.entity';
 import { ExpensesList } from './expenses-list.entity';
+import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
 
 @Injectable()
 export class ExpensesListService {
@@ -39,11 +39,24 @@ export class ExpensesListService {
         }
     }
 
-    async updateExpensesListStatus(id: number, status: ExpensesListStatus, user: User): Promise<ExpensesList> {
-        const task = await this.getExpensesListById(id, user);
-        task.status = status;
-        await task.save();
-        return task;
+    async updateExpensesListStatus(
+        id: number, updateExpensesListDto: UpdateExpensesListDto, user: User
+    ): Promise<ExpensesList> {
+        const expensesList = await this.getExpensesListById(id, user);
+        if (updateExpensesListDto.name) {
+            expensesList.name = updateExpensesListDto.name;
+        }
+        if (updateExpensesListDto.description) {
+            expensesList.description = updateExpensesListDto.description;
+        }
+        if (updateExpensesListDto.status) {
+            expensesList.status = updateExpensesListDto.status;
+        }
+        if (updateExpensesListDto.currency) {
+            expensesList.currency = updateExpensesListDto.currency;
+        }
+        await expensesList.save();
+        return expensesList;
     }
 }
 
