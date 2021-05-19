@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { ExpensesListRepository } from './expenses-list.repository';
@@ -7,16 +7,40 @@ import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { User } from 'src/auth/user.entity';
 import { ExpensesList } from './expenses-list.entity';
 import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
+import { ParticipantService } from 'src/participant/participant.service';
+import { ExpenseService } from 'src/expense/expense.service';
+import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
+import { Participant } from 'src/participant/participant.entity';
+import { Expense } from 'src/expense/expense.entity';
+import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
 
 @Injectable()
 export class ExpensesListService {
     constructor(
         @InjectRepository(ExpensesListRepository)
         private expensesListRepository: ExpensesListRepository,
+        @Inject(forwardRef(() => ExpenseService))
+        private expenseService: ExpenseService,
+        private participantService: ParticipantService
     ) {}
 
     async getExpensesLists(filterDto: GetExpensesListFilterDto, user: User): Promise<ExpensesList[]> {
         return this.expensesListRepository.getExpensesLists(filterDto, user);
+    }
+
+    async getExpensesListRelatedExpenses(id: number, user: User, filterDto: GetExpenseFilterDto): Promise<Expense[]> {
+        return this.expenseService.getExpenses(filterDto, user, id);
+    }
+
+    async getExpensesListRelatedParticipants(id: number, user: User): Promise<Participant[]> {
+        return this.participantService.getParticipants(user, id);
+    }
+
+    async createExpensesListParticipant(
+        id: number, createParticipantDto: CreateOrUpdateParticipantDto, user: User
+    ): Promise<Participant> {
+        const expensesList = await this.getExpensesListById(id, user);
+        return this.participantService.createParticipant(createParticipantDto, expensesList, user);
     }
 
     async getExpensesListById(id: number, user: User): Promise<ExpensesList> {

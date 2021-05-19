@@ -1,5 +1,5 @@
-import { InternalServerErrorException, Logger } from '@nestjs/common';
-import { EntityRepository, EntitySchema, Repository } from 'typeorm';
+import { InternalServerErrorException } from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
 import { User } from 'src/auth/user.entity';
 import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { ExpensesList } from './expenses-list.entity';

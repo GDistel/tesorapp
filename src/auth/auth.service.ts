@@ -1,9 +1,10 @@
 import { JwtPayload } from './jwt-payload.interface';
 import { UserRepository } from './user.repository';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
+import { User } from './user.entity';
 
 @Injectable()
 export class AuthService {
@@ -32,5 +33,13 @@ export class AuthService {
         const accessToken = await this.jwtService.sign(payload);
         this.logger.debug(`Generate JWT token with payload ${JSON.stringify(payload)}`)
         return { accessToken };
+    }
+
+    async findUserById(id: number): Promise<User> {
+        try {
+            return this.userRepository.findOne(id);
+        } catch (err) {
+            throw new InternalServerErrorException(err, 'Could not find the user with the provided it');
+        }
     }
 }

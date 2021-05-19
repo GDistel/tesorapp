@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/user.entity';
 import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
@@ -13,6 +13,7 @@ export class ExpenseService {
     constructor(
         @InjectRepository(ExpenseRepository)
         private expenseRepository: ExpenseRepository,
+        @Inject(forwardRef(() => ExpensesListService))
         private expensesListService: ExpensesListService
     ) {}
 

@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import * as config from 'config';
 
 const JwtConfig = config.get('jwt');
+const TypeOrmForUserRepository = TypeOrmModule.forFeature([UserRepository]);
 
 @Module({
     imports: [
@@ -19,10 +20,15 @@ const JwtConfig = config.get('jwt');
                 expiresIn: JwtConfig.expiresIn,
             },
         }),
-        TypeOrmModule.forFeature([UserRepository]),
+        TypeOrmForUserRepository,
     ],
     controllers: [AuthController],
     providers: [AuthService, JwtStrategy],
-    exports: [JwtStrategy, PassportModule],
+    exports: [
+        JwtStrategy,
+        PassportModule,
+        TypeOrmForUserRepository,
+        AuthService
+    ],
 })
 export class AuthModule {}

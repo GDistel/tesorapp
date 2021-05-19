@@ -9,6 +9,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
 import { Expense } from 'src/expense/expense.entity';
+import { Participant } from 'src/participant/participant.entity';
 
 @Entity()
 @Unique(['username'])
@@ -27,6 +28,9 @@ export class User extends BaseEntity {
 
     @OneToMany(type => Expense, expense => expense.user, { eager: true })
     expenses: Expense[];
+
+    @OneToMany(type => Participant, participant => participant.user, { eager: true })
+    participants: Participant[];
 
     async validatePassword(inputPassword: string): Promise<boolean> {
         return await bcrypt.compare(inputPassword, this.password);
