@@ -25,9 +25,7 @@ import { Expense } from 'src/expense/expense.entity';
 import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
 import { Participant } from 'src/participant/participant.entity';
 import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
-import { PagedResponse } from 'src/shared/interfaces';
-import { GetPagination } from 'src/shared/decorators';
-import { Pagination } from 'src/shared/utils';
+import { PagedResponse, GetPagination, Pagination } from 'src/shared';
 
 @Controller('expenses-list')
 @UseGuards(AuthGuard())

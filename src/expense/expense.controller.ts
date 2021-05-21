@@ -20,9 +20,7 @@ import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
 import { Expense } from './expense.entity';
 import { ExpenseService } from './expense.service';
-import { GetPagination } from 'src/shared/decorators';
-import { Pagination } from 'src/shared/utils';
-import { PagedResponse } from 'src/shared/interfaces';
+import { PagedResponse, GetPagination, Pagination } from 'src/shared';
 
 @Controller('expense')
 @UseGuards(AuthGuard())

@@ -6,8 +6,7 @@ import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { ExpenseType } from './expense.enums';
 import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
-import { Pagination } from 'src/shared/utils';
-import { PagedResponse } from 'src/shared/interfaces';
+import { PagedResponse, Pagination } from 'src/shared';
 
 @EntityRepository(Expense)
 export class ExpenseRepository extends Repository<Expense> {

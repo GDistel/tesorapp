@@ -13,8 +13,7 @@ import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
 import { Participant } from 'src/participant/participant.entity';
 import { Expense } from 'src/expense/expense.entity';
 import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
-import { PagedResponse } from 'src/shared/interfaces';
-import { Pagination } from 'src/shared/utils';
+import { PagedResponse, Pagination } from 'src/shared';
 
 @Injectable()
 export class ExpensesListService {
