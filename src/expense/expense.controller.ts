@@ -20,6 +20,9 @@ import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
 import { Expense } from './expense.entity';
 import { ExpenseService } from './expense.service';
+import { GetPagination } from 'src/shared/decorators';
+import { Pagination } from 'src/shared/utils';
+import { PagedResponse } from 'src/shared/interfaces';
 
 @Controller('expense')
 @UseGuards(AuthGuard())
@@ -30,9 +33,10 @@ export class ExpenseController {
     @Get()
     getExpenses(
         @Query(ValidationPipe) filterDto: GetExpenseFilterDto,
+        @GetPagination() pagination: Pagination,
         @GetUser() user: User
-    ): Promise<Expense[]> {
-        return this.expenseService.getExpenses(filterDto, user);
+    ): Promise<PagedResponse<Expense[]>> {
+        return this.expenseService.getExpenses(filterDto, user, pagination);
     }
 
     @Get('/:id')

@@ -7,6 +7,8 @@ import { Expense } from './expense.entity';
 import { ExpenseRepository } from './expense.repository';
 import { ExpensesListService } from 'src/expenses-list/expenses-list.service';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
+import { Pagination } from 'src/shared/utils';
+import { PagedResponse } from 'src/shared/interfaces';
 
 @Injectable()
 export class ExpenseService {
@@ -17,8 +19,8 @@ export class ExpenseService {
         private expensesListService: ExpensesListService
     ) {}
 
-    async getExpenses(filterDto: GetExpenseFilterDto, user: User, expensesListId?: number): Promise<Expense[]> {
-        return this.expenseRepository.getExpenses(filterDto, user, expensesListId);
+    async getExpenses(filterDto: GetExpenseFilterDto, user: User, pagination: Pagination, expensesListId?: number): Promise<PagedResponse<Expense[]>> {
+        return this.expenseRepository.getExpenses(filterDto, user, pagination, expensesListId);
     }
 
     async getExpenseById(id: number, user: User): Promise<Expense> {

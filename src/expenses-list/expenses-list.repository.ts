@@ -5,11 +5,15 @@ import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { ExpensesList } from './expenses-list.entity';
 import { ExpensesListStatus } from './expenses-list.enums';
 import { GetExpensesListFilterDto } from './dto/get-expenses-list-filter.dto';
+import { PagedResponse } from 'src/shared/interfaces';
+import { Pagination } from 'src/shared/utils';
 
 @EntityRepository(ExpensesList)
 export class ExpensesListRepository extends Repository<ExpensesList> {
 
-    async getExpensesLists(filterDto: GetExpensesListFilterDto, user: User): Promise<ExpensesList[]> {
+    async getExpensesLists(
+        filterDto: GetExpensesListFilterDto, user: User, pagination: Pagination
+    ): Promise<PagedResponse<ExpensesList[]>> {
         const { status, search } = filterDto;
         const query = this.createQueryBuilder('expensesList');
         query.where('expensesList.userId = :userId', {userId: user.id});
@@ -22,9 +26,10 @@ export class ExpensesListRepository extends Repository<ExpensesList> {
                 { search: `%${search}%` },
             );
         }
+        const paginatedQuery = pagination.paginateQuery<ExpensesList>(query);
         try {
-            const expensesLists = await query.getMany();
-            return expensesLists;    
+            const [expensesLists, totalCount] = await paginatedQuery.getManyAndCount();
+            return pagination.paginateItems<ExpensesList[]>(expensesLists, totalCount);
         } catch (err) {
             throw new InternalServerErrorException();
         }

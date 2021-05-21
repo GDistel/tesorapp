@@ -13,6 +13,8 @@ import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
 import { Participant } from 'src/participant/participant.entity';
 import { Expense } from 'src/expense/expense.entity';
 import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
+import { PagedResponse } from 'src/shared/interfaces';
+import { Pagination } from 'src/shared/utils';
 
 @Injectable()
 export class ExpensesListService {
@@ -24,12 +26,16 @@ export class ExpensesListService {
         private participantService: ParticipantService
     ) {}
 
-    async getExpensesLists(filterDto: GetExpensesListFilterDto, user: User): Promise<ExpensesList[]> {
-        return this.expensesListRepository.getExpensesLists(filterDto, user);
+    async getExpensesLists(
+        filterDto: GetExpensesListFilterDto, user: User, pagination: Pagination
+    ): Promise<PagedResponse<ExpensesList[]>> {
+        return this.expensesListRepository.getExpensesLists(filterDto, user, pagination);
     }
 
-    async getExpensesListRelatedExpenses(id: number, user: User, filterDto: GetExpenseFilterDto): Promise<Expense[]> {
-        return this.expenseService.getExpenses(filterDto, user, id);
+    async getExpensesListRelatedExpenses(
+        id: number, user: User, filterDto: GetExpenseFilterDto, pagination: Pagination
+    ): Promise<PagedResponse<Expense[]>> {
+        return this.expenseService.getExpenses(filterDto, user, pagination, id);
     }
 
     async getExpensesListRelatedParticipants(id: number, user: User): Promise<Participant[]> {

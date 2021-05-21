@@ -10,7 +10,8 @@ import {
     UsePipes,
     ValidationPipe,
     ParseIntPipe,
-    UseGuards
+    UseGuards,
+    Req
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
@@ -21,11 +22,12 @@ import { ExpensesList } from './expenses-list.entity';
 import { ExpensesListService } from './expenses-list.service';
 import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
 import { Expense } from 'src/expense/expense.entity';
-import { ExpenseService } from 'src/expense/expense.service';
 import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
 import { Participant } from 'src/participant/participant.entity';
 import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
-
+import { PagedResponse } from 'src/shared/interfaces';
+import { GetPagination } from 'src/shared/decorators';
+import { Pagination } from 'src/shared/utils';
 
 @Controller('expenses-list')
 @UseGuards(AuthGuard())
@@ -36,9 +38,10 @@ export class ExpensesListController {
     @Get()
     getExpensesLists(
         @Query(ValidationPipe) filterDto: GetExpensesListFilterDto,
+        @GetPagination() pagination: Pagination,
         @GetUser() user: User
-    ): Promise<ExpensesList[]> {
-        return this.expensesListService.getExpensesLists(filterDto, user);
+    ): Promise<PagedResponse<ExpensesList[]>> {
+        return this.expensesListService.getExpensesLists(filterDto, user, pagination);
     }
 
     @Get('/:id')
@@ -50,9 +53,10 @@ export class ExpensesListController {
     getExpensesListRelatedExpenses(
         @Param('id', ParseIntPipe) id: number,
         @Query(ValidationPipe) filterDto: GetExpenseFilterDto,
+        @GetPagination() pagination: Pagination,
         @GetUser() user: User
-    ): Promise<Expense[]> {
-        return this.expensesListService.getExpensesListRelatedExpenses(id, user, filterDto);
+    ): Promise<PagedResponse<Expense[]>> {
+        return this.expensesListService.getExpensesListRelatedExpenses(id, user, filterDto, pagination);
     }
 
     @Get('/:id/participants')
