@@ -19,11 +19,6 @@ export class CreateExpenseDto {
     @Max(Number.MAX_SAFE_INTEGER)
     paidBy: number;
 
-    @IsNotEmpty()
-    @Min(0)
-    @Max(Number.MAX_SAFE_INTEGER)
-    expensesListId: number
-
     // @IsNotEmpty()
     // destinataries: number[];
 }

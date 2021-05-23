@@ -36,7 +36,7 @@ describe('JwtStrategy', () => {
             expect(result).toEqual(user);
         });
 
-        it('throws an unothorized exception as user cannot be found', async () => {
+        it('throws an unauthorized exception as user cannot be found', async () => {
             userRepository.findOne.mockResolvedValue(null);
             await expect(jwtStrategy.validate({ username: 'TestUser' })).rejects.toThrow(UnauthorizedException);
         });

@@ -8,14 +8,13 @@ import { ExpenseRepository } from './expense.repository';
 import { ExpensesListService } from 'src/expenses-list/expenses-list.service';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { PagedResponse, Pagination } from 'src/shared';
+import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
 
 @Injectable()
 export class ExpenseService {
     constructor(
         @InjectRepository(ExpenseRepository)
-        private expenseRepository: ExpenseRepository,
-        @Inject(forwardRef(() => ExpensesListService))
-        private expensesListService: ExpensesListService
+        private expenseRepository: ExpenseRepository
     ) {}
 
     async getExpenses(filterDto: GetExpenseFilterDto, user: User, pagination: Pagination, expensesListId?: number): Promise<PagedResponse<Expense[]>> {
@@ -30,8 +29,7 @@ export class ExpenseService {
         return found;
     }
 
-    async createExpense(createExpenseDto: CreateExpenseDto, user: User): Promise<Expense> {
-        const expensesList = await this.expensesListService.getExpensesListById(createExpenseDto.expensesListId, user);
+    async createExpense(createExpenseDto: CreateExpenseDto, user: User, expensesList: ExpensesList): Promise<Expense> {
         return this.expenseRepository.createExpense(createExpenseDto, expensesList, user);
     }
 

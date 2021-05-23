@@ -6,8 +6,6 @@ import {
     Param,
     Query,
     Patch,
-    Post,
-    UsePipes,
     ValidationPipe,
     ParseIntPipe,
     UseGuards
@@ -15,7 +13,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
-import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
 import { Expense } from './expense.entity';
@@ -40,15 +37,6 @@ export class ExpenseController {
     @Get('/:id')
     getExpenseById(@Param('id', ParseIntPipe) id: number, @GetUser() user: User): Promise<Expense> {
         return this.expenseService.getExpenseById(id, user);
-    }
-
-    @Post()
-    @UsePipes(ValidationPipe)
-    createExpense(
-        @Body() createExpenseDto: CreateExpenseDto,
-        @GetUser() user: User
-    ): Promise<Expense> {
-        return this.expenseService.createExpense(createExpenseDto, user);
     }
 
     @Delete('/:id')

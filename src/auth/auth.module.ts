@@ -29,6 +29,6 @@ const TypeOrmForUserRepository = TypeOrmModule.forFeature([UserRepository]);
         PassportModule,
         TypeOrmForUserRepository,
         AuthService
-    ],
+    ]
 })
 export class AuthModule {}

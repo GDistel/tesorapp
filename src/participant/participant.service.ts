@@ -36,8 +36,6 @@ export class ParticipantService {
                 throw new InternalServerErrorException({ error: 'Could not find the user with the provided id' });
             }
             linkToUser = otherUser;
-            console.log(linkToUser)
-            console.log(otherUser)
         }
         return this.participantRepository.createParticipant(createParticipantDto, expensesList, linkToUser);
     }

@@ -7,21 +7,22 @@ import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { User } from 'src/auth/user.entity';
 import { ExpensesList } from './expenses-list.entity';
 import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
-import { ParticipantService } from 'src/participant/participant.service';
 import { ExpenseService } from 'src/expense/expense.service';
+import { ParticipantService } from 'src/participant/participant.service';
 import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
 import { Participant } from 'src/participant/participant.entity';
 import { Expense } from 'src/expense/expense.entity';
 import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
 import { PagedResponse, Pagination } from 'src/shared';
+import { CreateExpenseDto } from 'src/expense/dto/create-expense.dto';
 
 @Injectable()
 export class ExpensesListService {
     constructor(
         @InjectRepository(ExpensesListRepository)
         private expensesListRepository: ExpensesListRepository,
-        @Inject(forwardRef(() => ExpenseService))
         private expenseService: ExpenseService,
+        @Inject(forwardRef(() => ParticipantService))
         private participantService: ParticipantService
     ) {}
 
@@ -35,6 +36,13 @@ export class ExpensesListService {
         id: number, user: User, filterDto: GetExpenseFilterDto, pagination: Pagination
     ): Promise<PagedResponse<Expense[]>> {
         return this.expenseService.getExpenses(filterDto, user, pagination, id);
+    }
+
+    async createExpensesListExpense(
+        id: number, createExpenseDto: CreateExpenseDto, user: User
+    ): Promise<Expense> {
+        const expensesList = await this.getExpensesListById(id, user);
+        return this.expenseService.createExpense(createExpenseDto, user, expensesList);
     }
 
     async getExpensesListRelatedParticipants(id: number, user: User): Promise<Participant[]> {
