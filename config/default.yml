@@ -7,4 +7,8 @@ db:
   database: 'tesorapp'
 
 jwt:
-  expiresIn: 3600
+  # 15 minutes (seconds)
+  accessExpiresIn: 900
+  # 1 week (seconds)
+  refreshExpiresIn: 604800
+  

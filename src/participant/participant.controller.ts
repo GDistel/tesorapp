@@ -9,6 +9,7 @@ import {
     UsePipes,
     ValidationPipe,
     ParseIntPipe,
+    UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
@@ -18,6 +19,7 @@ import { Participant } from './participant.entity';
 import { ParticipantService } from './participant.service';
 
 @Controller('participant')
+@UseGuards(AuthGuard())
 export class ParticipantController {
     constructor(private participantService: ParticipantService) {}
 

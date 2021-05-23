@@ -1,6 +1,8 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { TokenDto } from './dto/refresh-token.dto';
+import { TokensResponse } from './interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -16,7 +18,14 @@ export class AuthController {
     @Post('/signin')
     signIn(
         @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
-    ): Promise<{ accessToken: string }> {
+    ): Promise<TokensResponse> {
         return this.authService.signIn(authCredentialsDto);
+    }
+
+    @Get('/refresh')
+    refresh(
+        @Query(ValidationPipe) tokenDto: TokenDto
+    ): Promise<TokensResponse> {
+        return this.authService.refresh(tokenDto);
     }
 }
