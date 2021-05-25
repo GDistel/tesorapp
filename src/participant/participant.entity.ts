@@ -1,6 +1,7 @@
 import { User } from 'src/auth/user.entity';
+import { Expense } from 'src/expense/expense.entity';
 import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Participant extends BaseEntity {
@@ -22,4 +23,7 @@ export class Participant extends BaseEntity {
 
     @Column()
     expensesListId: number;
+
+    @ManyToMany(() => Expense, expense => expense.participants)
+    expenses: Expense[];
 }

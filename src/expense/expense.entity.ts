@@ -1,6 +1,10 @@
 import { User } from 'src/auth/user.entity';
 import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Participant } from 'src/participant/participant.entity';
+import {
+    BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn,
+    RelationId
+} from 'typeorm';
 import { ExpenseType } from './expense.enums';
 
 @Entity()
@@ -18,10 +22,7 @@ export class Expense extends BaseEntity {
     date: string;
 
     @Column()
-    paidBy: number; // user id
-
-    // @Column()
-    // destinataries: number[];
+    paidBy: number; // participant id
 
     @Column()
     type: ExpenseType;
@@ -31,6 +32,13 @@ export class Expense extends BaseEntity {
 
     @Column()
     expensesListId: number;
+
+    @ManyToMany(() => Participant, participant => participant.expenses)
+    @JoinTable()
+    participants: Participant[];
+
+    @RelationId((expense: Expense) => expense.participants)
+    participantIds: number[];
 
     @ManyToOne(type => User, user => user.expenses, { eager: false })
     user: User;

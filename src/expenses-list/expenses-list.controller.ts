@@ -1,3 +1,4 @@
+import { ExpensesListResolution, FinalSolution } from './interfaces';
 import {
     Body,
     Controller,
@@ -48,6 +49,14 @@ export class ExpensesListController {
         return this.expensesListService.getExpensesListById(id, user);
     }
 
+    @Get('/:id/resolve')
+    getExpensesListResolution(
+        @Param('id', ParseIntPipe) id: number,
+        @GetUser() user: User
+    ): Promise<ExpensesListResolution> {
+        return this.expensesListService.getExpensesListResolution(id, user);
+    }
+
     @Post()
     @UsePipes(ValidationPipe)
     createExpensesList(
@@ -86,7 +95,7 @@ export class ExpensesListController {
         @Param('id', ParseIntPipe) id: number,
         @Body() createExpenseDto: CreateExpenseDto,
         @GetUser() user: User
-    ): Promise<Participant> {
+    ): Promise<Expense> {
         return this.expensesListService.createExpensesListExpense(id, createExpenseDto, user);
     }
 

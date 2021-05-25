@@ -1,3 +1,4 @@
+import { ExpensesListResolution, FinalSolution } from './interfaces';
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -15,6 +16,7 @@ import { Expense } from 'src/expense/expense.entity';
 import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
 import { PagedResponse, Pagination } from 'src/shared';
 import { CreateExpenseDto } from 'src/expense/dto/create-expense.dto';
+import { ExpensesSettler } from './expenses-list-settler';
 
 @Injectable()
 export class ExpensesListService {
@@ -42,7 +44,11 @@ export class ExpensesListService {
         id: number, createExpenseDto: CreateExpenseDto, user: User
     ): Promise<Expense> {
         const expensesList = await this.getExpensesListById(id, user);
-        return this.expenseService.createExpense(createExpenseDto, user, expensesList);
+        const participants = await this.participantService.getParticipants(user, expensesList.id);
+        const expenseParticipants = participants.filter(
+            participant => createExpenseDto.participantIds.includes(participant.id)
+        );
+        return this.expenseService.createExpense(createExpenseDto, user, expensesList, expenseParticipants);
     }
 
     async getExpensesListRelatedParticipants(id: number, user: User): Promise<Participant[]> {
@@ -63,6 +69,19 @@ export class ExpensesListService {
         }
         delete found.expenses;
         return found;
+    }
+
+    async getExpensesListResolution(id: number, user: User): Promise<ExpensesListResolution> {
+        // TO DO we need a smart way to get all expenses from a certain list, and not limit to 50
+        const pagination = new Pagination(1, 50);
+        const expensesList = await this.expensesListRepository.findOne({ where: { id } });
+        const expenses = await this.expenseService.getExpenses({} as GetExpenseFilterDto, user, pagination, id);
+        const expensesSettler = new ExpensesSettler(expenses.items, expensesList.participants);
+        const expensesListResolution: ExpensesListResolution = {
+            scores: expensesSettler.finalScore,
+            settle: expensesSettler.finalSolution
+        }
+        return expensesListResolution;
     }
 
     async createExpensesList(createExpensesListDto: CreateExpensesListDto, user: User): Promise<ExpensesList> {

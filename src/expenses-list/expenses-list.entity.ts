@@ -31,6 +31,6 @@ export class ExpensesList extends BaseEntity {
     expenses: Expense;
 
     @OneToMany(type => Participant, participant => participant.expensesList, { eager: true })
-    participants: Participant;
+    participants: Participant[];
 
 }

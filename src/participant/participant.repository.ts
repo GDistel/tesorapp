@@ -31,11 +31,13 @@ export class ParticipantRepository extends Repository<Participant> {
         participant.name = name;
         participant.user = user;
         participant.expensesList = expensesList;
+        participant.expenses = [];
         try {
             await participant.save();
         } catch(err) {
             throw new InternalServerErrorException();
         }
+        delete participant.expenses;
         delete participant.user;
         delete participant.expensesList;
         return participant;

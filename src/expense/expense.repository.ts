@@ -7,6 +7,7 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { ExpenseType } from './expense.enums';
 import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
 import { PagedResponse, Pagination } from 'src/shared';
+import { Participant } from 'src/participant/participant.entity';
 
 @EntityRepository(Expense)
 export class ExpenseRepository extends Repository<Expense> {
@@ -42,14 +43,16 @@ export class ExpenseRepository extends Repository<Expense> {
         }
     }
 
-    async createExpense(createExpenseDto: CreateExpenseDto, expensesList: ExpensesList, user: User): Promise<Expense> {
+    async createExpense(
+        createExpenseDto: CreateExpenseDto, expensesList: ExpensesList, participants: Participant[], user: User
+    ): Promise<Expense> {
         const { name, amount, date, paidBy } = createExpenseDto;
         const expense = new Expense();
         expense.name = name;
         expense.amount = amount;
         expense.date = date;
         expense.paidBy = paidBy;
-        // expense.destinataries = destinataries;
+        expense.participants = participants;
         expense.type = ExpenseType.USER;
         expense.expensesList = expensesList;
         expense.user = user;

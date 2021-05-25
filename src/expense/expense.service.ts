@@ -9,6 +9,7 @@ import { ExpensesListService } from 'src/expenses-list/expenses-list.service';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { PagedResponse, Pagination } from 'src/shared';
 import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
+import { Participant } from 'src/participant/participant.entity';
 
 @Injectable()
 export class ExpenseService {
@@ -29,8 +30,10 @@ export class ExpenseService {
         return found;
     }
 
-    async createExpense(createExpenseDto: CreateExpenseDto, user: User, expensesList: ExpensesList): Promise<Expense> {
-        return this.expenseRepository.createExpense(createExpenseDto, expensesList, user);
+    async createExpense(
+        createExpenseDto: CreateExpenseDto, user: User, expensesList: ExpensesList, participants: Participant[]
+    ): Promise<Expense> {
+        return this.expenseRepository.createExpense(createExpenseDto, expensesList, participants, user);
     }
 
     async deleteExpense(id: number, user: User): Promise<void> {
