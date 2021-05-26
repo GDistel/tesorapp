@@ -1,5 +1,5 @@
 import { ExpensesListResolution } from './interfaces';
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { ExpensesListRepository } from './expenses-list.repository';
@@ -65,17 +65,18 @@ export class ExpensesListService {
     async getExpensesListById(id: number, user: User): Promise<ExpensesList> {
         const found = await this.expensesListRepository.findOne({ where: { id, userId: user.id } });
         if (!found) {
-            throw new NotFoundException(`ExpensesList with ID "${id}" not found`);
+            throw new NotFoundException(`Expenses list with ID "${id}" not found`);
         }
         delete found.expenses;
         return found;
     }
 
     async getExpensesListResolution(id: number, user: User): Promise<ExpensesListResolution> {
-        // TO DO we need a smart way to get all expenses from a certain list, and not limit to 50
-        const pagination = new Pagination(0, 0);
         const expensesList = await this.expensesListRepository.findOne({ where: { id } });
+        if (!expensesList) throw new NotFoundException(`Expenses list with ID "${id}" not found`);
+        const pagination = new Pagination(0, 0); // (0, 0) to get all items
         const expenses = await this.expenseService.getExpenses({} as GetExpenseFilterDto, user, pagination, id);
+        if (!expenses) throw new NotFoundException(`Could not find any expenses for the expenses list with ID "${id}"`);;
         const expensesSettler = new ExpensesSettler(expenses.items, expensesList.participants);
         const expensesListResolution: ExpensesListResolution = {
             status: expensesSettler.participantsDebtStatus,

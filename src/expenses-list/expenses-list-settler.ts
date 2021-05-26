@@ -47,19 +47,19 @@ export class ExpensesSettler {
         const [participant1, amount1] = sortedDebts[firstIdx];
         const [participant2, amount2] = sortedDebts[lastIdx];
         if (sortedDebts.length === 2) {
-            participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
+            participantsSettlements[participant1].push({ payTo: participant2, amount: Math.abs(amount1) });
         } else {
             const difference = Math.abs(amount1) - Math.abs(amount2);
             if (difference > 0) {
-                participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount2) });
+                participantsSettlements[participant1].push({ payTo: participant2, amount: Math.abs(amount2) });
                 sortedDebts[firstIdx][1] = -1 * Math.abs(difference);
                 sortedDebts.pop();
             } else if (difference < 0) {
-                participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
+                participantsSettlements[participant1].push({ payTo: participant2, amount: Math.abs(amount1) });
                 sortedDebts[lastIdx][1] = Math.abs(difference);
                 sortedDebts.shift();
             } else if (difference === 0) {
-                participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
+                participantsSettlements[participant1].push({ payTo: participant2, amount: Math.abs(amount1) });
                 sortedDebts.shift();
                 sortedDebts.pop();
             }

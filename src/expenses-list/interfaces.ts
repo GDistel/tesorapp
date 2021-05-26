@@ -1,14 +1,16 @@
 export interface ParticipantsDebtStatus {
+    // the key is the participant id, the value is the participant's debt
     [key: number]: number;
 }
 
 export interface Settlement {
-    destinatary: string;
+    payTo: string;
     amount: number;
 }
 
 export interface ParticipantsSettlements {
-    [key: string]: Settlement[]
+    // the key is the participant id
+    [key: string]: Settlement[];
 }
 
 export interface ExpensesListResolution {
