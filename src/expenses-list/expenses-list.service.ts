@@ -73,7 +73,7 @@ export class ExpensesListService {
 
     async getExpensesListResolution(id: number, user: User): Promise<ExpensesListResolution> {
         // TO DO we need a smart way to get all expenses from a certain list, and not limit to 50
-        const pagination = new Pagination(1, 50);
+        const pagination = new Pagination(0, 0);
         const expensesList = await this.expensesListRepository.findOne({ where: { id } });
         const expenses = await this.expenseService.getExpenses({} as GetExpenseFilterDto, user, pagination, id);
         const expensesSettler = new ExpensesSettler(expenses.items, expensesList.participants);

@@ -12,12 +12,16 @@ export class Pagination {
     }
 
     private processLimitString(limit: number): number {
-        if (!limit) return 10;
+        if (limit === undefined || limit === null || limit < 0) return 10;
         const validLimit = limit > this.maxLimit ? this.maxLimit : limit;
         return Math.floor(validLimit);
     }
 
     public paginateQuery<T>(queryBuilder: SelectQueryBuilder<T>): SelectQueryBuilder<T> {
+        if (!this.skippedItems && !this.limit) {
+            // Includes the case in which we want to retrieve all items (skipped items and limit are both 0)
+            return queryBuilder;
+        }
         return queryBuilder.offset(this.skippedItems).limit(this.limit);
     }
 
