@@ -1,4 +1,4 @@
-import { ExpensesListResolution, FinalSolution } from './interfaces';
+import { ExpensesListResolution } from './interfaces';
 import {
     Body,
     Controller,

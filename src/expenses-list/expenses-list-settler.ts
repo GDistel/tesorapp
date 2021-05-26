@@ -1,68 +1,70 @@
 import { Expense } from "src/expense/expense.entity";
 import { Participant } from "src/participant/participant.entity";
-import { FinalScore, FinalSolution } from "./interfaces";
+import { ParticipantsDebtStatus, ParticipantsSettlements } from "./interfaces";
 
 export class ExpensesSettler {
-    public finalScore: FinalScore;
-    public finalSolution: FinalSolution;
+    public participantsDebtStatus: ParticipantsDebtStatus;
+    public participantsSettlements: ParticipantsSettlements;
 
-    constructor(public expenses: Expense[], public expensesListParticipants: Participant[]) {
-        this.finalScore = this.getFinalScore(expenses, expensesListParticipants);
-        this.finalSolution = this.createFinalSolution();
+    constructor(private expenses: Expense[], private expensesListParticipants: Participant[]) {
+        this.participantsDebtStatus = this.getParticipantsDebtStatus(expenses, expensesListParticipants);
+        this.participantsSettlements = this.getParticipantsSettlements();
     }
 
-    private getFinalScore(expenses: Expense[], participants: Participant[]): FinalScore {
-        const finalScore = this.initFinalScore(participants);
+    private getParticipantsDebtStatus(expenses: Expense[], participants: Participant[]): ParticipantsDebtStatus {
+        const participantsDebtStatus = this.initDebtStatusObject(participants);
         expenses.forEach(expense => {
             const destinataries = expense.participantIds.length;
             const debtShare = expense.amount / destinataries;
-            expense.participantIds.forEach(participantId => finalScore[participantId] -= debtShare);
-            finalScore[expense.paidBy] += expense.amount;
+            expense.participantIds.forEach(participantId => participantsDebtStatus[participantId] -= debtShare);
+            participantsDebtStatus[expense.paidBy] += expense.amount;
         });
-        return finalScore;
+        return participantsDebtStatus;
     }
 
-    private initFinalScore(participants: Participant[]): FinalScore {
-        const emptyFinalScore = { } as FinalScore;
+    private initDebtStatusObject(participants: Participant[]): ParticipantsDebtStatus {
+        const emptyDebtStatus = { } as ParticipantsDebtStatus;
         return participants.reduce(
-            (finalScore, participant) => ({ ...finalScore, [participant.id]: 0 }), emptyFinalScore
+            (participantsDebtStatus, participant) => ({ ...participantsDebtStatus, [participant.id]: 0 }), emptyDebtStatus
         );
     }
 
-    public createFinalSolution(): FinalSolution {
-        const sortedDebts = Object.entries(this.finalScore).sort(
+    public getParticipantsSettlements(): ParticipantsSettlements {
+        const sortedDebtsMatrix: [string, number][] = Object.entries(this.participantsDebtStatus).sort(
             ([participantId1, debtAmount1], [participantId2, debtAmount2]) => debtAmount1 - debtAmount2
         );
-        return this.reduceDebtorsArray(sortedDebts);
+        return this.createParticipantsSettlements(sortedDebtsMatrix);
     }
 
-    private reduceDebtorsArray(sortedDebts: any[], finalSolution = {} as FinalSolution): FinalSolution {
-        if (!Object.keys(finalSolution).length) {
-            this.expensesListParticipants.forEach(part => finalSolution[part.id] = []);
+    private createParticipantsSettlements(
+        sortedDebts: [string, number][], participantsSettlements = {} as ParticipantsSettlements
+    ): ParticipantsSettlements {
+        if (!Object.keys(participantsSettlements).length) {
+            this.expensesListParticipants.forEach(part => participantsSettlements[part.id] = []);
         }
-        const startIdx = 0;
-        const endIdx = sortedDebts.length - 1;
-        const [participant1, amount1] = sortedDebts[startIdx];
-        const [participant2, amount2] = sortedDebts[endIdx];
+        const firstIdx = 0;
+        const lastIdx = sortedDebts.length - 1;
+        const [participant1, amount1] = sortedDebts[firstIdx];
+        const [participant2, amount2] = sortedDebts[lastIdx];
         if (sortedDebts.length === 2) {
-            finalSolution[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
+            participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
         } else {
-            const comparison = Math.abs(amount1) - Math.abs(amount2);
-            if (comparison > 0) {
-                finalSolution[participant1].push({ destinatary: participant2, amount: Math.abs(amount2) });
-                sortedDebts[startIdx][1] = -1 * Math.abs(comparison);
+            const difference = Math.abs(amount1) - Math.abs(amount2);
+            if (difference > 0) {
+                participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount2) });
+                sortedDebts[firstIdx][1] = -1 * Math.abs(difference);
                 sortedDebts.pop();
-            } else if (comparison < 0) {
-                finalSolution[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
-                sortedDebts[endIdx][1] = Math.abs(comparison);
+            } else if (difference < 0) {
+                participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
+                sortedDebts[lastIdx][1] = Math.abs(difference);
                 sortedDebts.shift();
-            } else if (comparison === 0) {
-                finalSolution[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
+            } else if (difference === 0) {
+                participantsSettlements[participant1].push({ destinatary: participant2, amount: Math.abs(amount1) });
                 sortedDebts.shift();
                 sortedDebts.pop();
             }
-            this.reduceDebtorsArray(sortedDebts, finalSolution);
+            this.createParticipantsSettlements(sortedDebts, participantsSettlements);
         }
-        return finalSolution;
+        return participantsSettlements;
     }
 }

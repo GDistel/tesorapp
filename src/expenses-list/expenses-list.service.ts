@@ -1,4 +1,4 @@
-import { ExpensesListResolution, FinalSolution } from './interfaces';
+import { ExpensesListResolution } from './interfaces';
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -78,9 +78,9 @@ export class ExpensesListService {
         const expenses = await this.expenseService.getExpenses({} as GetExpenseFilterDto, user, pagination, id);
         const expensesSettler = new ExpensesSettler(expenses.items, expensesList.participants);
         const expensesListResolution: ExpensesListResolution = {
-            scores: expensesSettler.finalScore,
-            settle: expensesSettler.finalSolution
-        }
+            status: expensesSettler.participantsDebtStatus,
+            settle: expensesSettler.participantsSettlements
+        };
         return expensesListResolution;
     }
 

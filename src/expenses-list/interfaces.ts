@@ -1,4 +1,4 @@
-export interface FinalScore {
+export interface ParticipantsDebtStatus {
     [key: number]: number;
 }
 
@@ -7,11 +7,11 @@ export interface Settlement {
     amount: number;
 }
 
-export interface FinalSolution {
+export interface ParticipantsSettlements {
     [key: string]: Settlement[]
 }
 
 export interface ExpensesListResolution {
-    scores: FinalScore;
-    settle: FinalSolution;
+    status: ParticipantsDebtStatus;
+    settle: ParticipantsSettlements;
 }
