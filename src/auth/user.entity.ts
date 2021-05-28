@@ -3,6 +3,7 @@ import {
     Column,
     Entity,
     OneToMany,
+    PrimaryColumn,
     PrimaryGeneratedColumn,
     Unique,
 } from 'typeorm';
@@ -17,11 +18,20 @@ export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({unique: true})
+    email: string;
+
     @Column()
+    verified: boolean;
+
+    @Column({unique: true})
     username: string;
 
     @Column()
     password: string;
+
+    @Column({ nullable: true })
+    token: string;
 
     @OneToMany(type => ExpensesList, expensesList => expensesList.user, { eager: true })
     expensesLists: ExpensesList[];

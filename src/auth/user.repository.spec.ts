@@ -5,7 +5,8 @@ import { UserRepository } from "./user.repository";
 
 const mockCredentialsDto = {
     username: 'TestUsername',
-    password: 'TestPassword'
+    password: 'TestPassword',
+    email: 'someemail@mail.com'
 };
 
 describe('UserRepository', () => {
