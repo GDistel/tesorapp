@@ -12,7 +12,7 @@ import { SignUpDto } from './dto/sign-up.dto';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-    async signup(signUpDto: SignUpDto, token: string): Promise<void> {
+    async signup(signUpDto: SignUpDto, token: string): Promise<User> {
         const { username, password, email } = signUpDto;
         const user = this.create();
         const salt = await bcrypt.genSalt();
@@ -21,10 +21,11 @@ export class UserRepository extends Repository<User> {
         user.email = email;
         user.verified = false;
         user.token = token;
-        // @TODO replace with email verification logic
+        // @TODO remove this in production
         console.log(token);
         try {
             await user.save();
+            return user;
         } catch (error) {
             if (error.code === '23505') {
                 throw new ConflictException('Username or Email already exist');

@@ -8,6 +8,7 @@ import { TokenDto } from './dto/refresh-token.dto';
 import * as config from 'config';
 import { TokensResponse, JwtPayload } from './interfaces';
 import { SignUpDto } from './dto/sign-up.dto';
+import { EmailService } from 'src/shared/email.service';
 
 @Injectable()
 export class AuthService {
@@ -17,11 +18,14 @@ export class AuthService {
         @InjectRepository(UserRepository)
         private userRepository: UserRepository,
         private jwtService: JwtService,
-    ) {}
+        private readonly emailSvc: EmailService
+    ) { }
 
     async signUp(signUpDto: SignUpDto): Promise<void> {
         const tokens: TokensResponse = await this.getTokens(signUpDto.username);
-        return this.userRepository.signup(signUpDto, tokens.refresh);
+        const user: User = await this.userRepository.signup(signUpDto, tokens.refresh);
+        // if (!user) return;
+        // await this.emailSvc.sendAccountActivationEmail(user);
     }
 
     async signIn(

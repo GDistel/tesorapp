@@ -11,4 +11,6 @@ jwt:
   accessExpiresIn: 900
   # 1 week (seconds)
   refreshExpiresIn: 604800
+
+email:
   
