@@ -47,14 +47,23 @@ export class ParticipantService {
         }
     }
 
-    async updateParticipantStatus(
+    async updateParticipant(
         id: number, updateParticipantDto: CreateOrUpdateParticipantDto, user: User
     ): Promise<Participant> {
         const participant = await this.getParticipantById(id, user);
         if (updateParticipantDto.name) {
             participant.name = updateParticipantDto.name;
         }
+        if (updateParticipantDto.linkToUserId) {
+            const otherUser = await this.authService.findUserById(updateParticipantDto.linkToUserId);
+            if (!otherUser) {
+                throw new NotFoundException(`The user with id ${updateParticipantDto.linkToUserId} does not exist`);
+            }
+            participant.user = otherUser;
+            participant.userId = otherUser.id;
+        }
         await participant.save();
+        delete participant.user;
         return participant;
     }
 }

@@ -39,6 +39,6 @@ export class ParticipantController {
         @Body() updateParticipantDto: CreateOrUpdateParticipantDto,
         @GetUser() user: User
     ): Promise<Participant> {
-        return this.participantService.updateParticipantStatus(id, updateParticipantDto, user);
+        return this.participantService.updateParticipant(id, updateParticipantDto, user);
     }
 }
