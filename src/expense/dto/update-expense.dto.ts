@@ -1,4 +1,4 @@
-import { IsDateString, IsOptional, Length, Max, Min } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsOptional, Length, Max, Min } from 'class-validator';
 
 export class UpdateExpenseDto {
     @IsOptional()
@@ -18,4 +18,10 @@ export class UpdateExpenseDto {
     @Min(0)
     @Max(Number.MAX_SAFE_INTEGER)
     paidBy: number;
+
+    @IsNotEmpty()
+    @Min(0)
+    @Max(Number.MAX_SAFE_INTEGER)
+    participantIds: number[];
+
 }

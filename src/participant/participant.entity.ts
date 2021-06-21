@@ -18,7 +18,7 @@ export class Participant extends BaseEntity {
     @Column()
     userId: number;
 
-    @ManyToOne(type => ExpensesList, expensesList => expensesList.participants, { eager: false })
+    @ManyToOne(type => ExpensesList, expensesList => expensesList.participants, { eager: false, onDelete: 'CASCADE' })
     expensesList: ExpensesList;
 
     @Column()

@@ -57,6 +57,9 @@ export class ExpenseService {
         if (updateExpenseDto.paidBy) {
             expense.paidBy = updateExpenseDto.paidBy;
         }
+        if (updateExpenseDto.participantIds) {
+            expense.participantIds = updateExpenseDto.participantIds;
+        }
         await expense.save();
         return expense;
     }
