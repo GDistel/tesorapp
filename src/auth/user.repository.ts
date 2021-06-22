@@ -21,8 +21,6 @@ export class UserRepository extends Repository<User> {
         user.email = email;
         user.verified = false;
         user.token = token;
-        // @TODO remove this in production
-        console.log(token);
         try {
             await user.save();
             return user;
