@@ -18,7 +18,7 @@ export class EmailService {
     async sendAccountActivationEmail(user: User): Promise<void> {
         const msg = {
             to: user.email,
-            from: process.env.SENDGRID_API_KEY || config.get('email.sender'),
+            from: process.env.SG_EMAIL_SENDER || config.get('email.sender'),
             subject: `Tesorapp - ${user.username} confirm your email`,
             html: `
                 Please confirm your email by clicking <a href="https://www.google.com">here</a>.
