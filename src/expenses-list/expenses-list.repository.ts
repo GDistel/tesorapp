@@ -25,6 +25,7 @@ export class ExpensesListRepository extends Repository<ExpensesList> {
                 { search: `%${search}%` },
             );
         }
+        query.orderBy('LOWER(expensesList.name)', 'ASC');
         const paginatedQuery = pagination.paginateQuery<ExpensesList>(query);
         try {
             const [expensesLists, totalCount] = await paginatedQuery.getManyAndCount();
