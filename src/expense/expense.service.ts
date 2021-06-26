@@ -43,8 +43,11 @@ export class ExpenseService {
         }
     }
 
-    async updateExpenseStatus(id: number, updateExpenseDto: UpdateExpenseDto, user: User): Promise<Expense> {
+    async updateExpense(id: number, updateExpenseDto: UpdateExpenseDto, user: User): Promise<Expense> {
         const expense = await this.getExpenseById(id, user);
+        if (!expense) {
+            throw new NotFoundException(`Expense with ID "${id}" not found`);
+        }
         if (updateExpenseDto.name) {
             expense.name = updateExpenseDto.name;
         }
