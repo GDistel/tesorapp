@@ -33,6 +33,7 @@ export class ExpenseRepository extends Repository<Expense> {
                 { search: `%${search}%` },
             );
         }
+        query.orderBy('expense.date', 'DESC');
         const paginatedQuery = pagination.paginateQuery<Expense>(query);
         try {
             const [expenses, totalCounts] = await paginatedQuery.getManyAndCount();

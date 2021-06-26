@@ -19,7 +19,7 @@ export class UpdateExpenseDto {
     @Max(Number.MAX_SAFE_INTEGER)
     paidBy: number;
 
-    @IsNotEmpty()
+    @IsOptional()
     @Min(0)
     @Max(Number.MAX_SAFE_INTEGER)
     participantIds: number[];

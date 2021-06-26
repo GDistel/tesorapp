@@ -50,7 +50,7 @@ export class ExpenseController {
         @Body() updateExpenseDto: UpdateExpenseDto,
         @GetUser() user: User
     ): Promise<Expense> {
-        return this.expenseService.updateExpenseStatus(id, updateExpenseDto, user);
+        return this.expenseService.updateExpense(id, updateExpenseDto, user);
     }
 }
 
