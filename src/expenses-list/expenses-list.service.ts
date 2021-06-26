@@ -76,7 +76,9 @@ export class ExpensesListService {
         if (!expensesList) throw new NotFoundException(`Expenses list with ID "${id}" not found`);
         const pagination = new Pagination(0, 0); // (0, 0) to get all items
         const expenses = await this.expenseService.getExpenses({} as GetExpenseFilterDto, user, pagination, id);
-        if (!expenses) throw new NotFoundException(`Could not find any expenses for the expenses list with ID "${id}"`);;
+        if (!expenses || !expenses.items.length) {
+            throw new NotFoundException(`Could not find any expenses for the expenses list with ID "${id}"`);
+        }
         const expensesSettler = new ExpensesSettler(expenses.items, expensesList.participants);
         const expensesListResolution: ExpensesListResolution = {
             status: expensesSettler.participantsDebtStatus,
