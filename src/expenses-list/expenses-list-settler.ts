@@ -30,6 +30,9 @@ export class ExpensesSettler {
     }
 
     public getParticipantsSettlements(): ParticipantsSettlements {
+        if (!this.participantsDebtStatus) {
+            return;
+        }
         const sortedDebtsMatrix: [string, number][] = Object.entries(this.participantsDebtStatus).sort(
             ([participantId1, debtAmount1], [participantId2, debtAmount2]) => debtAmount1 - debtAmount2
         );
