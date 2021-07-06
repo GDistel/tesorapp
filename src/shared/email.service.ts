@@ -28,6 +28,7 @@ export class EmailService {
         try {
             await sgMail.send(msg);
         } catch (error) {
+            console.error(error);
             throw new InternalServerErrorException('Failed to send email');
         }
     }
