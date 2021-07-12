@@ -1,6 +1,6 @@
-import { User } from 'src/auth/user.entity';
-import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
-import { Participant } from 'src/participant/participant.entity';
+import { User } from '../auth/user.entity';
+import { ExpensesList } from '../expenses-list/expenses-list.entity';
+import { Participant } from '../participant/participant.entity';
 import {
     BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn,
     RelationId

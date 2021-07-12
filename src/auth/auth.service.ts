@@ -8,7 +8,7 @@ import { TokenDto } from './dto/refresh-token.dto';
 import * as config from 'config';
 import { TokensResponse, JwtPayload } from './interfaces';
 import { SignUpDto } from './dto/sign-up.dto';
-import { EmailService } from 'src/shared/email.service';
+import { EmailService } from '../shared/email.service';
 
 @Injectable()
 export class AuthService {

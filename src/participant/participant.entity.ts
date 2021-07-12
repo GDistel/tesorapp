@@ -1,6 +1,6 @@
-import { User } from 'src/auth/user.entity';
-import { Expense } from 'src/expense/expense.entity';
-import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
+import { User } from '../auth/user.entity';
+import { Expense } from '../expense/expense.entity';
+import { ExpensesList } from '../expenses-list/expenses-list.entity';
 import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

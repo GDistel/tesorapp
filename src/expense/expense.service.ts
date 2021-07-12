@@ -1,15 +1,15 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { Expense } from './expense.entity';
 import { ExpenseRepository } from './expense.repository';
-import { ExpensesListService } from 'src/expenses-list/expenses-list.service';
+import { ExpensesListService } from '../expenses-list/expenses-list.service';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
-import { PagedResponse, Pagination } from 'src/shared';
-import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
-import { Participant } from 'src/participant/participant.entity';
+import { PagedResponse, Pagination } from '../shared';
+import { ExpensesList } from '../expenses-list/expenses-list.entity';
+import { Participant } from '../participant/participant.entity';
 
 @Injectable()
 export class ExpenseService {

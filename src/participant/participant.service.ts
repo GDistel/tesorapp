@@ -1,9 +1,9 @@
 import { AuthService } from './../auth/auth.service';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
-import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
-import { ExpensesListService } from 'src/expenses-list/expenses-list.service';
+import { User } from '../auth/user.entity';
+import { ExpensesList } from '../expenses-list/expenses-list.entity';
+import { ExpensesListService } from '../expenses-list/expenses-list.service';
 import { CreateOrUpdateParticipantDto } from './dto/create-update-participant.dto';
 import { Participant } from './participant.entity';
 import { ParticipantRepository } from './participant.repository';

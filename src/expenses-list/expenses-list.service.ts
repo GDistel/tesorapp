@@ -5,17 +5,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ExpensesListRepository } from './expenses-list.repository';
 import { GetExpensesListFilterDto } from './dto/get-expenses-list-filter.dto';
 import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 import { ExpensesList } from './expenses-list.entity';
 import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
-import { ExpenseService } from 'src/expense/expense.service';
-import { ParticipantService } from 'src/participant/participant.service';
-import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
-import { Participant } from 'src/participant/participant.entity';
-import { Expense } from 'src/expense/expense.entity';
-import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
-import { PagedResponse, Pagination } from 'src/shared';
-import { CreateExpenseDto } from 'src/expense/dto/create-expense.dto';
+import { ExpenseService } from '../expense/expense.service';
+import { ParticipantService } from '../participant/participant.service';
+import { GetExpenseFilterDto } from '../expense/dto/get-expense-filter.dto';
+import { Participant } from '../participant/participant.entity';
+import { Expense } from '../expense/expense.entity';
+import { CreateOrUpdateParticipantDto } from '../participant/dto/create-update-participant.dto';
+import { PagedResponse, Pagination } from '../shared';
+import { CreateExpenseDto } from '../expense/dto/create-expense.dto';
 import { ExpensesSettler } from './expenses-list-settler';
 
 @Injectable()
@@ -73,7 +73,9 @@ export class ExpensesListService {
 
     async getExpensesListResolution(id: number, user: User): Promise<ExpensesListResolution> {
         const expensesList = await this.expensesListRepository.findOne({ where: { id } });
-        if (!expensesList) throw new NotFoundException(`Expenses list with ID "${id}" not found`);
+        if (!expensesList) {
+            throw new NotFoundException(`Expenses list with ID "${id}" not found`);
+        }
         const pagination = new Pagination(0, 0); // (0, 0) to get all items
         const expenses = await this.expenseService.getExpenses({} as GetExpenseFilterDto, user, pagination, id);
         if (!expenses || !expenses.items.length) {
@@ -98,7 +100,7 @@ export class ExpensesListService {
         }
     }
 
-    async updateExpensesListStatus(
+    async updateExpensesList(
         id: number, updateExpensesListDto: UpdateExpensesListDto, user: User
     ): Promise<ExpensesList> {
         const expensesList = await this.getExpensesListById(id, user);

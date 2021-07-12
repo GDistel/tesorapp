@@ -11,13 +11,13 @@ import {
     UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { GetExpenseFilterDto } from './dto/get-expense-filter.dto';
 import { Expense } from './expense.entity';
 import { ExpenseService } from './expense.service';
-import { PagedResponse, GetPagination, Pagination } from 'src/shared';
+import { PagedResponse, GetPagination, Pagination } from '../shared';
 
 @Controller('expense')
 @UseGuards(AuthGuard())
