@@ -1,11 +1,11 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { ExpensesList } from './expenses-list.entity';
 import { ExpensesListStatus } from './expenses-list.enums';
 import { GetExpensesListFilterDto } from './dto/get-expenses-list-filter.dto';
-import { PagedResponse, Pagination } from 'src/shared';
+import { PagedResponse, Pagination } from '../shared';
 
 @EntityRepository(ExpensesList)
 export class ExpensesListRepository extends Repository<ExpensesList> {

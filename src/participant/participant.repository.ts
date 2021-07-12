@@ -1,9 +1,9 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 import { Participant } from './participant.entity';
 import { CreateOrUpdateParticipantDto } from './dto/create-update-participant.dto';
-import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
+import { ExpensesList } from '../expenses-list/expenses-list.entity';
 
 @EntityRepository(Participant)
 export class ParticipantRepository extends Repository<Participant> {

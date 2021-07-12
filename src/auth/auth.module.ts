@@ -7,7 +7,7 @@ import { UserRepository } from './user.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import * as config from 'config';
-import { EmailService } from 'src/shared/email.service';
+import { EmailService } from '../shared/email.service';
 
 const JwtConfig = config.get('jwt');
 const TypeOrmForUserRepository = TypeOrmModule.forFeature([UserRepository]);

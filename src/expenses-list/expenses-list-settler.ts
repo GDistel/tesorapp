@@ -1,5 +1,5 @@
-import { Expense } from "src/expense/expense.entity";
-import { Participant } from "src/participant/participant.entity";
+import { Expense } from "../expense/expense.entity";
+import { Participant } from "../participant/participant.entity";
 import { ParticipantsDebtStatus, ParticipantsSettlements } from "./interfaces";
 
 export class ExpensesSettler {

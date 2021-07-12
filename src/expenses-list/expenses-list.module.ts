@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from 'src/auth/auth.module';
-import { ParticipantModule } from 'src/participant/participant.module';
+import { AuthModule } from '../auth/auth.module';
+import { ParticipantModule } from '../participant/participant.module';
 import { ExpenseModule } from './../expense/expense.module';
 import { ExpensesListController } from './expenses-list.controller';
 import { ExpensesListRepository } from './expenses-list.repository';

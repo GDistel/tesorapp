@@ -8,9 +8,9 @@ import {
     Unique,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { ExpensesList } from 'src/expenses-list/expenses-list.entity';
-import { Expense } from 'src/expense/expense.entity';
-import { Participant } from 'src/participant/participant.entity';
+import { ExpensesList } from '../expenses-list/expenses-list.entity';
+import { Expense } from '../expense/expense.entity';
+import { Participant } from '../participant/participant.entity';
 
 @Entity()
 @Unique(['username'])

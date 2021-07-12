@@ -15,19 +15,19 @@ import {
     Req
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
 import { CreateExpensesListDto } from './dto/create-expenses-list.dto';
 import { GetExpensesListFilterDto } from './dto/get-expenses-list-filter.dto';
 import { ExpensesList } from './expenses-list.entity';
 import { ExpensesListService } from './expenses-list.service';
 import { UpdateExpensesListDto } from './dto/update-expenses-list.dto';
-import { Expense } from 'src/expense/expense.entity';
-import { GetExpenseFilterDto } from 'src/expense/dto/get-expense-filter.dto';
-import { Participant } from 'src/participant/participant.entity';
-import { CreateOrUpdateParticipantDto } from 'src/participant/dto/create-update-participant.dto';
-import { PagedResponse, GetPagination, Pagination } from 'src/shared';
-import { CreateExpenseDto } from 'src/expense/dto/create-expense.dto';
+import { Expense } from '../expense/expense.entity';
+import { GetExpenseFilterDto } from '../expense/dto/get-expense-filter.dto';
+import { Participant } from '../participant/participant.entity';
+import { CreateOrUpdateParticipantDto } from '../participant/dto/create-update-participant.dto';
+import { PagedResponse, GetPagination, Pagination } from '../shared';
+import { CreateExpenseDto } from '../expense/dto/create-expense.dto';
 
 @Controller('expenses-list')
 @UseGuards(AuthGuard())
@@ -72,12 +72,12 @@ export class ExpensesListController {
     }
 
     @Patch('/:id')
-    updateExpensesListStatus(
+    updateExpensesList(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateExpensesListDto: UpdateExpensesListDto,
         @GetUser() user: User
     ): Promise<ExpensesList> {
-        return this.expensesListService.updateExpensesListStatus(id, updateExpensesListDto, user);
+        return this.expensesListService.updateExpensesList(id, updateExpensesListDto, user);
     }
 
     @Get('/:id/expenses')
