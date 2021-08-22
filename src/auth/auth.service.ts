@@ -25,7 +25,7 @@ export class AuthService {
         const tokens: TokensResponse = await this.getTokens(signUpDto.username);
         const user: User = await this.userRepository.signup(signUpDto, tokens.refresh);
         if (!user) return;
-        await this.emailSvc.sendAccountActivationEmail(user);
+        await this.emailSvc.sendAccountActivationEmail(user, signUpDto.verifyUrl);
     }
 
     async signIn(

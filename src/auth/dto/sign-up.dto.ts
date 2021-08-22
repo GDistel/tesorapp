@@ -1,4 +1,4 @@
-import { IsEmail, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 import { AuthCredentialsDto } from './auth-credentials.dto';
 
 export class SignUpDto extends AuthCredentialsDto {
@@ -6,4 +6,7 @@ export class SignUpDto extends AuthCredentialsDto {
     @MaxLength(30)
     @IsEmail()
     email: string;
+
+    @IsNotEmpty()
+    verifyUrl: string;
 }
