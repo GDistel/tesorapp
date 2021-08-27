@@ -1,5 +1,5 @@
 import { UserRepository } from './user.repository';
-import { Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -49,10 +49,13 @@ export class AuthService {
     async refresh(tokenDto: TokenDto): Promise<TokensResponse> {
         const { username, exp } = this.jwtService.decode(tokenDto.token) as { username: string, exp: number };
         const user: User = await this.userRepository.findOne({ where: { username } });
-        const isStoredToken = user.token === tokenDto.token;
         const tokenExpired = (new Date()).getTime() > exp * 1000;
-        if (!user || tokenExpired || !isStoredToken) {
+        if (!user || tokenExpired) {
             throw new UnauthorizedException('Invalid token');
+        }
+        const isStoredToken = user.token === tokenDto.token;
+        if (!isStoredToken) {
+            throw new ConflictException('You have logged in from another device');
         }
         const tokens: TokensResponse = await this.getTokens(username);
         user.token = tokens.refresh;
